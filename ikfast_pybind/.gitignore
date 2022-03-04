@@ -1,0 +1,26 @@
+build/
+dist/
+_build/
+_generate/
+*.so
+*.py[cod]
+*.egg-info
+
+# Clion stuff
+.idea/
+cmake-build-debug/
+
+# Jupyter check point
+**/.ipynb_checkpoints/
+
+*.DS_Store
+
+.ropeproject
+
+# ctags
+.tags
+.tags1
+
+.cache
+
+.vscode

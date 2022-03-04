@@ -1,0 +1,22 @@
+train_root: "dataset/nut/train_isolated_nunocs"
+val_root: "dataset/nut/test_isolated_nunocs"
+batch_size: 34
+n_workers: 20
+
+
+nocs_class_name: nut
+random_seed: 0
+n_epochs: 50
+n_pts: 8192
+start_lr: 0.01
+lr_milestones: [30]
+optimizer_type: adam
+weight_decay: 0.0000001
+input_channel: 6
+ce_loss_bins: 100
+
+################# Augmentations
+rotate_cloud_prob: 0
+flip_cloud_prob: 0
+dropout_prob: 0.5
+dropout_max_ratio: 0.5

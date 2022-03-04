@@ -1,0 +1,9 @@
+class_name: screw   #  nut/hnm/screw
+ob_name: screw_carr_94323A329_NYLON
+nocs_grasp_sampler_score_larger_than: 0.95
+nocs_grasp_sampler_max_n_grasp: 10000
+cone_grasp_smapler_n_sphere_dir: 30
+cone_grasp_smapler_approach_step: 0.002
+p_G_thres: 0.5     # Skip grasp candidate if P(G)<*
+p_T_given_G_thres: 0.5  # Skip grasp candidate if P(T|G)<*
+p_T_G_thres: 0.1  # Skip grasp candidate if P(T,G)<*

@@ -1,0 +1,52 @@
+train_root: "dataset/nut/train_cloud_n_crop_per_side_1_downsample_size_0.0005"
+val_root: "dataset/nut/test_cloud_n_crop_per_side_1_downsample_size_0.0005"
+batch_size: 110
+n_workers: 20
+
+class_name: nut
+random_seed: 0
+n_epochs: 100
+start_lr: 0.01
+lr_milestones: [60]
+optimizer_type: adam
+weight_decay: 0.0000001
+downsample_size: 0.0005
+
+################# Augmentations
+rotate_cloud_prob: 0
+flip_cloud_prob: 0.
+
+
+GENERAL:
+  ignore_label: -100
+  input_channel: 3
+  scale: 500   # voxel_size = 1 / scale, scale 50(2cm)
+  full_scale: [128, 999999]  # Too small will cause error
+  max_npoint: 250000
+  mode: 4 # 4=mean
+
+STRUCTURE:
+  model_name: pointgroup
+  m: 16 # 16 or 32
+  block_residual: True
+  block_reps: 2
+  use_coords: True
+
+TRAIN:
+  loss_weight: [1.0, 1.0, 1.0, 1.0] # semantic_loss, offset_norm_loss, offset_dir_loss, score_loss
+  pretrain_module: []
+  fix_module: []
+
+GROUP:
+  score_fullscale: 14    # 1/14=0.0714 m, To scale cluster
+  score_mode: 4 # mean
+  cluster_radius: 0.001   # Unit in meter, should be slightly larger than downsample_size
+  cluster_radius_shift: 0.0005   # radius for shifted points
+  cluster_meanActive: 50   # average num of neighbor points within radius for each point
+  cluster_shift_meanActive: 100
+  cluster_npoint_thre: 200   # A cluster should have at least this number of point
+  fg_thresh: 0.75
+  bg_thresh: 0.25
+  prepare_epochs: 999999
+
+

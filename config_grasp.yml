@@ -1,0 +1,34 @@
+train_root: "dataset/nut/train"
+val_root: "dataset/nut/test"
+batch_size: 240
+n_workers: 30
+
+class_name: nut
+random_seed: 0
+n_epochs: 70
+n_pts: 2048
+start_lr: 0.01
+lr_milestones: [30,50]
+optimizer_type: adam
+weight_decay: 0.0000001
+input_channel: 6
+classes: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.01]
+
+################# Augmentations
+rotate_cloud_prob: 0
+flip_cloud_prob: 0.5
+
+
+# Grasping params
+gripper_dir:
+  nut: 'urdf/robotiq_hande'
+  hnm: 'urdf/robotiq_hande'
+  screw: 'urdf/robotiq_hande'
+
+target_num_grasps: -1
+
+sampling_friction_coef: 2.0
+num_cone_faces: 8
+grasp_samples_per_surface_point: 2
+max_num_surface_points: 100
+min_contact_dist: 0.0025

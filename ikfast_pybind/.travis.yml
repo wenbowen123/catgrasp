@@ -1,0 +1,132 @@
+language: cpp
+dist: trusty
+matrix:
+  include:
+  - name: Linux with py2.7
+    os: linux
+    env: PYTHON=2.7
+  - name: Linux with py3.4
+    os: linux
+    env: PYTHON=3.4
+  # - os: linux
+  #   env: CONDA=2.7
+  # - os: linux
+  #   env: CONDA=3.6
+  - name: OSX with py2.7
+    os: osx
+    env: PYTHON=2.7
+  - name: OSX with py3.6
+    os: osx
+    env: PYTHON=3.6
+  # - os: osx
+  #   env: CONDA=2.7
+  # - os: osx
+  #   env: CONDA=3.6
+  - name: Windows (VS2017 x64) with py2.7
+    # adapted from: https://github.com/wireshark/wireshark/blob/master/.travis.yml
+    # Set a supported language, otherwise the Windows worker will not start.
+    language : shell
+    os : windows
+    env:
+      - PLATFORM: x64
+      - PYTHON=2.7
+    cache:
+      directories:
+        - travis-cache
+  - name: Windows (VS2017 Win32) with py2.7
+    language: shell
+    os: windows
+    env:
+      - PLATFORM: Win32
+      - PYTHON=2.7
+    cache:
+      directories:
+        - travis-cache
+  # Windows builds are experimental in Travis and are unreliable, do not force it.
+  # https://docs.travis-ci.com/user/reference/windows/
+  # https://blog.travis-ci.com/2018-10-11-windows-early-release
+  allow_failures:
+    - os: windows
+    - os: linux
+# ignore linux for now...
+# /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast0x1000004a.Transform6D.0_1_2_3_4_5.cpp: In function ‘double IKatan2(double, double)’:
+#   /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast0x1000004a.Transform6D.0_1_2_3_4_5.cpp:196:17: error: call of overloaded ‘isnan(double&)’ is ambiguous
+#        if( isnan(fy) ) {
+#                    ^
+#   /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast0x1000004a.Transform6D.0_1_2_3_4_5.cpp:196:17: note: candidates are:
+#   In file included from /usr/include/features.h:374:0,
+#                    from /usr/include/x86_64-linux-gnu/c++/4.8/bits/os_defines.h:39,
+#                    from /usr/include/x86_64-linux-gnu/c++/4.8/bits/c++config.h:426,
+#                    from /usr/include/c++/4.8/bits/stl_algobase.h:59,
+#                    from /usr/include/c++/4.8/vector:60,
+#                    from /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast.h:33,
+#                    from /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast0x1000004a.Transform6D.0_1_2_3_4_5.cpp:22:
+#   /usr/include/x86_64-linux-gnu/bits/mathcalls.h:234:1: note: int isnan(double)
+#    __MATHDECL_1 (int,isnan,, (_Mdouble_ __value)) __attribute__ ((__const__));
+#    ^
+#   In file included from /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast.h:36:0,
+#                    from /tmp/pip-req-build-GIREBh/src/kuka_kr6_r900/ikfast0x1000004a.Transform6D.0_1_2_3_4_5.cpp:22:
+#   /usr/include/c++/4.8/cmath:626:3: note: constexpr bool std::isnan(long double)
+#      isnan(long double __x)
+#      ^
+#   /usr/include/c++/4.8/cmath:622:3: note: constexpr bool std::isnan(double)
+#      isnan(double __x)
+#      ^
+#   /usr/include/c++/4.8/cmath:618:3: note: constexpr bool std::isnan(float)
+#      isnan(float __x)
+before_install:
+- |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    export CXX=g++-4.8 CC=gcc-4.8;
+  elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    export CXX=clang++ CC=clang;
+  fi
+  if [ -n "$PYTHON" ]; then
+    if [ "$TRAVIS_OS_NAME" == "osx" ] && [ "${PYTHON:0:1}" == "3" ]; then
+      brew update; brew install python3;
+    fi
+    if [ "$TRAVIS_OS_NAME" != "windows" ]; then
+      pip install --user --upgrade pip virtualenv;
+      python -m virtualenv -p python$PYTHON venv;
+      source venv/bin/activate;
+      pip install pytest numpy
+    elif [ "$TRAVIS_OS_NAME" == "windows" ]; then
+      tools/travis-cache-windows.sh restore;
+      # cinst -y --no-progress python3;
+      export PATH="$(powershell -Command '("Process", "Machine" | % {
+        [Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
+      } | Select -Unique | % { cygpath $_ }) -Join ":"')";
+      echo "PATH=$PATH";
+      # pip3 install --disable-pip-version-check --user --upgrade pip setuptools
+      python --version
+      pip install setuptools pytest numpy
+    fi
+  elif [ -n "$CONDA" ]; then
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
+    wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
+    bash miniconda.sh -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda config --set always_yes yes --set changeps1 no
+    conda config --add channels conda-forge
+    conda update -q conda
+    conda install -q conda-build
+    conda create -q -n test-environment python=$CONDA
+    source activate test-environment
+  fi
+install:
+- |
+  if [ -n "$PYTHON" ]; then
+      python setup.py sdist
+    if [ "$TRAVIS_OS_NAME" != "windows" ]; then
+      pip install --verbose dist/*.tar.gz
+    elif [ "$TRAVIS_OS_NAME" == "windows" ]; then
+      # wildcard in windows shell: https://superuser.com/questions/460598/is-there-any-way-to-get-the-windows-cmd-shell-to-expand-wildcard-paths
+      powershell -Command "& ls"
+      powershell -Command "& pip install --verbose $(ls dist/*.tar.gz | % {$_.FullName})"
+    fi
+  elif [ -n "$CONDA" ]; then
+    conda build conda.recipe
+    # conda install --use-local ikfast_pybind
+  fi
+script:
+- pytest

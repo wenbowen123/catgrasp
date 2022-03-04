@@ -1,0 +1,84 @@
+K: [2257.7500557850776,0,1032,0,2257.4882391629421,772,0,0,1]
+H: 1544   # image height
+W: 2064   # image width
+zfar: 3   # Depth clip distance
+
+
+################# Dataset
+
+dataset:
+  n_train: 20000        # num of training images
+  n_val: 1000
+  num_pile_objects: [1,10]   # num of objects to form the pile in the bin
+  object_scales: [0.5,2]   # Random scale object
+
+  nut:
+    train:
+      [
+        "nut_LBNR12-screw.obj",
+        "nut_carr_95505A631.obj",
+        "nut_carr_95496A380_MIL_SPEC.obj",
+        "nut_carr_95010A240_GRADE.obj",
+        "nut_carr_92362A160_TYPE_18-8.obj",
+        "nut_carr_91034A423_LOW-STRENGTH.obj",
+        "nut_carr_90580A717_EXTRA-WD.obj",
+        "nut_carr_90566A271_LOW-STRENGTH.obj",
+        "nut_carr_90565A061_GRADE.obj",
+        "nut_carr_90387A512_GLASS-FILLED.obj",
+        "nut_carr_90215A433_NICKEL-PLATED.obj",
+        "nut_carr_6407T760_HIGH-PRESSURE-VACUUM.obj",
+      ]
+    test:
+      [
+        "nut_carr_5533K266_COMPRESSION.obj",
+        "nut_carr_5016K234_POLYPROPYLENE.obj",
+        "nut_carr_91015A036_LOW-STRENGTH.obj",
+        "nut_carr_90565A340_GRADE.obj"
+      ]
+
+
+  hnm:
+    train:
+      [
+        hnm_ENG_CVM_CVM_T2032162201-000B.obj,
+        hnm_cylinder_ENG_CVM_CVM_T2111020201-007_A.obj,
+        hnm_ENG_CVM_CVM_T2030242201-000B.obj,
+        hnm_ENG_CVM_CVM_T2050182201-000B.obj,
+      ]
+
+    test:
+      [
+        hnm_ENG_CVM_CVM_T2050322201-000B.obj,
+        hnm_nist_waterproof_male.obj,
+        hnm_cylinder_ENG_CVM_CVM_T2111032201-007_A.obj,
+        hnm_ENG_CVM_CVM_T2050323201-000B.obj,
+      ]
+
+
+  screw:
+    train:
+      [
+        "screw_1.obj",
+        "screw_16MM_M8_BUTTON_HEAD.obj",
+        "screw_28-Rotor_Boltx5-5-16-18x1x1-HX-S.obj",
+        "screw_375_bolt.obj",
+        "screw_Hexalobular_socket_screw-M10-20-20-10-13-8-C0.obj",
+        "screw_Hexalobular_socket_screw-M4-15-15-3-5-3.obj",
+        "screw_Hexalobular_socket_screw-M6-25-10-9-9-6-C0.obj",
+        "screw_ISO_7380-1_M3x16mm_v7.obj",
+        "screw_m10x1-knurled-thumb-screw-1.obj",
+        "screw_M3x6.obj",
+        "screw_M3x8.obj",
+        "screw_nist_M4.obj",
+        "screw_pan_head_cross_recess_screw_iso7045.obj",
+        "screw_torx-conical-headed-t25-m5x10-screw.obj",
+        "screw_carr_3503K61_PLASTIC.obj",
+        'screw_carr_6479K79_BLACK.obj'
+      ]
+    test:
+      [
+        'screw_carr_94323A329_NYLON.obj',
+        "screw_carr_97334A764_NYLON.obj",
+        "screw_carr_97435A401_WEAR.obj",
+        'screw_carr_63625K310_POLYPROPYLENE.obj',
+      ]

@@ -1,0 +1,20 @@
+global-include CMakeLists.txt *.cmake
+recursive-include ext/pybind11/include *.h
+graft src
+
+prune docs
+prune tests
+
+include AUTHORS.rst
+include CHANGELOG.rst
+include CONTRIBUTING.rst
+include LICENSE
+include README.rst
+include setup_cmake_utils.py
+include requirements.txt
+
+exclude requirements-dev.txt
+exclude .bumpversion.cfg
+exclude tasks.py
+
+global-exclude *.py[cod] __pycache__ *.dylib *.nb[ic] .DS_Store

@@ -1,0 +1,15 @@
+attrs>=17.4
+autopep8
+bumpversion>=0.5
+check-manifest>=0.36
+flake8
+invoke>=0.14
+isort
+paramiko
+pylint
+pytest
+scp
+sphinx>=1.5
+twine
+numpy
+-e .
