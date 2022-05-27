@@ -84,7 +84,7 @@ def compute_canonical_model():
       if obj_file==other_file:
         continue
       other_cloud = copy.deepcopy(clouds[other_file])
-      other_cloud = (transforms_to_nocs[other_file]@to_homo(other_cloud).T)[:,:3]
+      other_cloud = (transforms_to_nocs[other_file]@to_homo(other_cloud).T).T[:,:3]
       cd = chamfer_distance_between_clouds_mutual(cloud,other_cloud)
       dists.append(cd)
     avg_dist = np.concatenate(dists,axis=0).reshape(-1).mean()

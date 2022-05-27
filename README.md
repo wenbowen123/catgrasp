@@ -59,7 +59,10 @@ We provide docker environment and setup is as easy as below a few lines.
   cd  docker && bash run_container.sh
   cd /home/catgrasp && bash build.sh
   ```
-  Now the environment is ready to run training or testing.
+  Now the environment is ready to run training or testing. Later you can re-enter the lauched docker environment without re-compilation by:
+  ```
+  docker exec -it catgrasp bash
+  ```
 
 
 # Data
